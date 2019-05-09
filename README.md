@@ -16,7 +16,7 @@ Mitsuo Shiota
   - [Ranks distribution in each city in
     2018](#ranks-distribution-in-each-city-in-2018)
 
-original post: 2019-04-19
+Updated: 2019-05-09
 
 Warning: If you can’t read Japanese, it would be very difficult for you
 to follow me in this project of exploring [e-Stat, Statistics of

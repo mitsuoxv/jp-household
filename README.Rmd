@@ -1,7 +1,7 @@
 ---
 title: "Japan Family Income and Expenditure Survey, city competition"
 author: "Mitsuo Shiota"
-date: "`r Sys.Date()`"
+date: "2019-04-19"
 output: 
   github_document:
     
@@ -14,8 +14,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
-
-original post: 2019-04-19
+Updated: `r Sys.Date()`
 
 Warning: If you can't read Japanese, it would be very difficult for you to follow me in this project of exploring  [e-Stat, Statistics of Japan](https://www.e-stat.go.jp/en). I tried to refer to English pages, but often failed to find them. Even in API, when I set the parameter lang as "E" for English, the response was "statsDataId equal to [0003125169] does not exist". I had to set lang as "J" for Japanese, instead.
 
@@ -255,6 +254,13 @@ expenditure %>%
     x = "",
     y = "yen per year per household"
   )
+
+# save expense for Shiny app
+expense <- expenditure %>% 
+  filter(unit == "円", cat02_code == "03", year >= 2007) %>% 
+  rename(cat01 = `品目分類（27年改定）`)
+
+saveRDS(expense, file = "data/expense.rds")
 
 ```
 
