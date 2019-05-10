@@ -16,7 +16,10 @@ Mitsuo Shiota
   - [Ranks distribution in each city in
     2018](#ranks-distribution-in-each-city-in-2018)
 
-Updated: 2019-05-09
+Updated: 2019-05-10
+
+I have made [shinyapps.io](https://mitsuoxv.shinyapps.io/jp-household/),
+based on these data.
 
 Warning: If you can’t read Japanese, it would be very difficult for you
 to follow me in this project of exploring [e-Stat, Statistics of
@@ -378,5 +381,11 @@ Wakayama-city, Naha-city and other Kyushu cities, partly due to price
 level differences.
 
 ![](README_files/figure-gfm/total_expenditure-1.png)<!-- -->
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   city = col_character(),
+    ##   city_e = col_character()
+    ## )
 
 EOL

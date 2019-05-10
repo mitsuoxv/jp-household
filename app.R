@@ -72,8 +72,6 @@ ui <- fluidPage(
     )
 )
 
-?sliderInput
-
 # Define server logic required to draw a bar chart
 server <- function(input, output, session) {
   observe({
@@ -95,9 +93,11 @@ server <- function(input, output, session) {
             filter(cat01_code == input$select, year == input$year,
                    area_code != "00000") %>% 
             mutate(loser = (value != max(value))) %>% 
-            ggplot(aes(x = reorder(city, desc(city)), y = value, fill = loser)) +
+            ggplot(aes(x = reorder(city_e, desc(city_e)), y = value, fill = loser)) +
             geom_bar(stat = "identity", width = 1) +
             geom_hline(yintercept = national_average, color = "white", size = 1) +
+            annotate("text", x = "26100 Kyoto", y = national_average,
+                     label = "National average") +
             guides(fill = "none") +
             coord_flip() +
             labs(
