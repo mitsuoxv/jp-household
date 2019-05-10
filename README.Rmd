@@ -257,6 +257,8 @@ expenditure %>%
     y = "yen per year per household"
   )
 
+```
+```{r save_for_shiny, include=FALSE}
 # save expense for Shiny app
 expense <- expenditure %>% 
   filter(unit == "円", cat02_code == "03", year >= 2007) %>% 

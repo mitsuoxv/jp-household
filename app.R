@@ -35,14 +35,24 @@ for (i in seq_along(cat01_code_level)) {
   cat01_code_level[[i]] <- split(temp$cat01_code, temp$cat01)
 }
 
+# create city list
+temp <- expense %>% 
+  select(city, city_e) %>% 
+  unique()
+
+city_list <- split(temp$city_e, temp$city)
+
+# test
+area_ranks <- expense %>% 
+  filter(level == 5) %>% 
+  filter(area_code != "00000") %>% 
+  group_by(year, cat01_code) %>% 
+  mutate(ranks = rank(desc(value), ties.method = "average")) %>% 
+  ungroup()
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
-
-    # Application title
-    titlePanel("City competition to consume, based on Japan Family Income and Expenditure Survey"),
-
-    # Sidebar with a slider input for year 
+ui <- navbarPage("City competition to consume",
+    tabPanel("By item",
     sidebarLayout(
         sidebarPanel(
             radioButtons("radio", label = h3("Select item level"),
@@ -57,6 +67,7 @@ ui <- fluidPage(
 
             hr(),
             
+            # Sidebar with a slider input for year 
             sliderInput("year",
                         label = h3("Select year"), 
                         min = 2007,
@@ -69,6 +80,29 @@ ui <- fluidPage(
         mainPanel(
            plotOutput("barPlot", height = "600px")
         )
+    )
+    ),
+    tabPanel("By city",
+             sidebarLayout(
+               sidebarPanel(
+                 selectInput("select_city", label = h3("Select city"), 
+                             choices = city_list),
+                 
+                 hr(),
+                 
+                 # Sidebar with a slider input for ranks 
+                 sliderInput("select_rank",
+                             label = h3("Select ranks"), 
+                             min = 1,
+                             max = 52,
+                             value = 1,
+                             sep = "")               ),
+               
+               # Show a table
+               mainPanel(
+                 DT::dataTableOutput("table")
+               )
+             )
     )
 )
 
@@ -103,6 +137,14 @@ server <- function(input, output, session) {
             labs(
                 x = "", y = "annual expenditure per household (yen)"
             )
+    })
+    
+    output$table <- DT::renderDataTable({
+      area_ranks %>% 
+        filter(city_e == input$select_city, ranks <= input$select_rank) %>% 
+        select(year, ranks, cat01) %>% 
+        arrange(desc(year), ranks, cat01) %>% 
+        DT::datatable()
     })
   })  
 }
