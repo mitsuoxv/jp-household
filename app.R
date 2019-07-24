@@ -37,6 +37,7 @@ for (i in seq_along(cat01_code_level)) {
 
 # create city list
 temp <- expense %>% 
+  filter(area_code != "00000") %>% 
   select(city, city_e) %>% 
   unique()
 
@@ -73,7 +74,16 @@ ui <- navbarPage("City competition to consume",
                         min = 2007,
                         max = 2018,
                         value = 2018,
-                        sep = "")
+                        sep = ""),
+            
+            hr(),
+            
+            # Show source and Shiny app creator
+            a(href = "https://www.stat.go.jp/english/data/kakei/", 
+              "Source: Statistics Bureau of Japan, Japan Family Income and Expenditure Survey"),
+            br(),
+            a(href = "https://mitsuoxv.rbind.io/", 
+              "Shiny app creator: Mitsuo Shiota")
         ),
 
         # Show a plot of the generated bar chart
