@@ -23,13 +23,9 @@ Warning: If you can't read Japanese, it would be very difficult for you to follo
 
 ## Summary
 
-I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. That is an annual routine news report. Hamamatsu-city declared victory in February 2019 [(Japanese)](https://prtimes.jp/main/html/rd/p/000000009.000038874.html).
+I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. That is an annual routine news report. Utsunomiya-city defeated last-year-champion Hamamatsu-city in 2019 [(Japanese)](https://www.at-s.com/news/article/topics/shizuoka/734708.html), based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
 
-Their claims are based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
-
-I confirm their claim in dumplings, and another claim in grilled eel. 
-
-I find that persistent winning items are speciality goods of each city. I list the top earners in 2018. I draw ranks distribution in each city in 2018. And I argue ranks distribution is partly due to total expenditure differences.
+I find that persistent winning items are speciality goods of each city. I list the top earners in 2019. I draw ranks distribution in each city in 2019. And I argue ranks distribution is partly due to total expenditure differences.
 
 ```{r libraries, include=FALSE}
 library(tidyverse)
@@ -92,17 +88,15 @@ expenditure <- content %>%
   rename(city = 地域区分)
 
 ```
-## Confirm the Hamamatsu-city's victory in dumplings
+## Confirm the Utsunomiya-city's victory in dumplings
 
 According to [this page (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.html), the sample numbers per city are approximately 100 except Tokyo (408 samples). If I assume the standard deviation is 30 percent of the mean, the standard error ratio (ratio of standard deviation of mean estimates to the estimated mean) is 3 percent. Table 1-1 in [this page](https://www.stat.go.jp/data/kakei/hyohonkekka.html) publish the standard error ratios in cat01 of level less than 3 in 2013 survey, and the numbers do not contradict my assumption of 3 percent standard error ratio for cat01 of level 5. 
-
-The second rank Utsunomiya-city consumed 7.4 percent less than top Hamamatsu-city. Is this difference statistically significant? Imagine two bell shape curves, left and right. There are overlap area in the left curve's right slope and the right curve's left slope. 1 standard error from each (total 6 percent) does not overlap, but 2 standard error (total 12 percent) overlap. 
 
 ```{r confirm, echo=FALSE}
 # 010920070 371 ぎょうざ
 top10city <- expenditure %>% 
   filter(cat01_code == "010920070") %>% 
-  filter(year == 2018, area_code != "00000") %>% 
+  filter(year == 2019, area_code != "00000") %>% 
   select(city, value) %>% 
   arrange(desc(value)) %>% 
   top_n(10)
@@ -111,7 +105,7 @@ top10city
 
 ```
 
-The battle between Hamamatsu-city and Utsunomiya-city is not just in 2018, but has a long history, according to the table in Hamamatsu-city's victory declaration [(Japanese)](https://prtimes.jp/main/html/rd/p/000000009.000038874.html). Let us confirm it by drawing all available years of top 10 cities in 2018.
+The battle between Hamamatsu-city and Utsunomiya-city is not just in 2019, but has a long history. Let us draw all available years of top 10 cities in 2019.
 
 ```{r line_chart, echo=FALSE, fig.width=6, fig.width=8}
 expenditure %>% 
@@ -130,9 +124,9 @@ The differences between top 2 and the rest are narrowing.
 
 By the way, these expenditures don't include dumplings you eat at the restaurants.
 
-## Confirm the Hamamatsu-city's victory in grilled eel
+## Hamamatsu-city lost championship in grilled eel, too
 
-Hamamatsu-city's victory declaration [(Japanese)](https://prtimes.jp/main/html/rd/p/000000009.000038874.html) also says that Hamamatsu-city has been the top of eating the grilled eel in 11 years in a row. Let us confirm it.
+Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018.
 
 I search eel to get cat01_code. It is "010920010".
 
@@ -154,7 +148,7 @@ area_ranks <- expenditure %>%
 
 ```
 
-I show the top 3 in eel every year, and confirm Hamamatsu-city's claim again.
+I show the top 3 in eel every year.
 
 ```{r eel_top3, echo=FALSE}
 area_ranks %>% 
@@ -165,11 +159,11 @@ area_ranks %>%
   t()
 
 ```
-As Hamamatsu-city joined non-prefectural-capital large cities in April 2007, their numbers began to show up from 2008.
+To my surprise, Hamamatsu-city is not in the top 3.
 
 ## Persistent victory items are mostly speciality goods
 
-Are there similar items whose consumption are dominated persistently by one city? I count the number of cities which get the top rank in 11 years from 2007 to 2018 for each item.
+I count the number of cities which get the top rank in 11 years from 2007 to 2019 for each item.
 
 ```{r histogram, echo=FALSE, fig.width=6, fig.height=6}
 n_top <- area_ranks %>% 
@@ -193,38 +187,38 @@ There are `r nrow(n_top_1)` items where one city keeps the top rank. Most of the
 
 ```{r speciality goods, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2018) %>% 
+  filter(ranks == 1, year == 2019) %>% 
   semi_join(n_top_1, by = "cat01_code") %>% 
   select(cat01_code, `品目分類（27年改定）`, city) %>% 
   print(n=Inf)
 
 ```
 
-## Who are the top earners in 2018?
+## Who are the top earners in 2019?
 
-In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2018?
+In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2019?
 
 ```{r top_counts, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2018) %>% 
+  filter(ranks == 1, year == 2019) %>% 
   group_by(city) %>% 
   count(sort = TRUE) %>% 
   print(n=Inf)
 
 ```
 
-## Ranks distribution in each city in 2018
+## Ranks distribution in each city in 2019
 
-I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2018. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
+I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2019. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
 
 ```{r histogram2, echo=FALSE, fig.width=10, fig.height=8}
 area_ranks %>% 
-  filter(year == 2018) %>% 
+  filter(year == 2019) %>% 
   ggplot(aes(x = ranks)) +
   geom_histogram(boundary= 0.5, binwidth = 4) +
   facet_wrap(~ city) +
   coord_cartesian(xlim = c(1, 52)) +
-  labs(title = "Ranks distribution in 52 cities in 2018")
+  labs(title = "Ranks distribution in 52 cities in 2019")
 
 ```
 This pattern reflects that total expenditures are high in Kanto, and low in Wakayama-city, Naha-city and other Kyushu cities, partly due to price level differences.
@@ -237,18 +231,18 @@ expenditure %>%
 
 national <- expenditure %>% 
   filter(cat01_code == "001100000") %>%
-  filter(year == 2018, area_code == "00000", cat02_code == "03") %>% 
+  filter(year == 2019, area_code == "00000", cat02_code == "03") %>% 
   select(value) %>%
   as.numeric()
 
 expenditure %>% 
   filter(cat01_code == "001100000") %>% #消費支出
-  filter(year == 2018, area_code != "00000") %>% 
+  filter(year == 2019, area_code != "00000") %>% 
   ggplot(aes(x = fct_reorder(city, value), y = value)) +
   geom_hline(yintercept = national,
              color = "white", size = 2) +
   geom_point() +
-  annotate("text", x = "34100 広島市", y = national + 190000,
+  annotate("text", x = "23100 名古屋市", y = national + 190000,
            label = "national mean") +
   coord_flip() +
   labs(
