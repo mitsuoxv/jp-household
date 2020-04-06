@@ -53,6 +53,11 @@ area_ranks <- expense %>%
 
 # Define UI for application that draws a histogram
 ui <- navbarPage("City competition to consume",
+                 
+                 tags$head(includeHTML(("google-analytics.html"))),
+                 
+                 selected = "By item",
+
     tabPanel("By item",
     sidebarLayout(
         sidebarPanel(
