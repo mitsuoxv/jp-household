@@ -10,6 +10,11 @@
 # libraries
 library(shiny)
 library(tidyverse)
+library(NipponMap)
+library(sf)
+
+# read map data
+japan_shp <- st_read(system.file("shapes/jpn.shp", package="NipponMap"))
 
 # read data
 expense <- readRDS("data/expense.rds")
@@ -93,6 +98,7 @@ ui <- navbarPage("City competition to consume",
 
         # Show a plot of the generated bar chart
         mainPanel(
+           plotOutput("mapPlot", height = "500px"),
            plotOutput("barPlot", height = "600px")
         )
     )
@@ -152,6 +158,21 @@ server <- function(input, output, session) {
             labs(
                 x = "", y = "annual expenditure per household (yen)"
             )
+    })
+
+    output$mapPlot <- renderPlot({
+          # draw the map chart with the specified year
+          exp_only_capital <- expense %>% 
+            filter(!area_code %in% c("00000", "14004", "14150", "22004", "27004", "40003")) %>% #全国、川崎市、相模原市、浜松市、堺市、北九州市
+            filter(cat01_code == input$select, year == input$year)
+          
+          japan_shp %>% 
+            ggplot() +
+            geom_sf(aes(fill = exp_only_capital$value)) +
+            scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                                 midpoint = median(exp_only_capital$value)) +
+            labs(fill = "yen per year per household") +
+            theme_void()
     })
     
     output$table <- DT::renderDataTable({
