@@ -252,6 +252,32 @@ expenditure %>%
   )
 
 ```
+
+I draw the map of 47 prefectures by excluding 5 non-capital cities.
+
+```{r jpn_shp, echo=FALSE, results="hide"}
+library(NipponMap)
+library(sf)
+
+japan_shp <- st_read(system.file("shapes/jpn.shp", package="NipponMap"))
+
+exp_only_capital <- expenditure %>% 
+  filter(!area_code %in% c("00000", "14004", "14150", "22004", "27004", "40003")) %>% #全国、川崎市、相模原市、浜松市、堺市、北九州市
+  filter(cat01_code == "001100000") %>% #消費支出
+  filter(year == 2019) %>% 
+  arrange(area_code)
+
+japan_shp %>% 
+  ggplot() +
+  geom_sf(aes(fill = exp_only_capital$value)) +
+  scale_fill_gradient2(low = "#559999", mid = "grey90", high = "#BB650B",
+                       midpoint = median(exp_only_capital$value)) +
+  labs(fill = "Total expenditure\nyen per year per household") +
+  theme_void()
+
+```
+
+
 ```{r save_for_shiny, include=FALSE}
 # save expense for Shiny app
 expense <- expenditure %>% 

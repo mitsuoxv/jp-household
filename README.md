@@ -8,15 +8,15 @@ Mitsuo Shiota
   - [Get data](#get-data)
   - [Confirm the Utsunomiya-city’s victory in
     dumplings](#confirm-the-utsunomiya-citys-victory-in-dumplings)
-  - [Confirm the Hamamatsu-city’s victory in grilled
-    eel](#confirm-the-hamamatsu-citys-victory-in-grilled-eel)
+  - [Hamamatsu-city lost championship in grilled eel,
+    too](#hamamatsu-city-lost-championship-in-grilled-eel-too)
   - [Persistent victory items are mostly speciality
     goods](#persistent-victory-items-are-mostly-speciality-goods)
   - [Who are the top earners in 2019?](#who-are-the-top-earners-in-2019)
   - [Ranks distribution in each city in
     2019](#ranks-distribution-in-each-city-in-2019)
 
-Updated: 2020-02-07
+Updated: 2020-08-26
 
 I have made [shinyapps.io](https://mitsuoxv.shinyapps.io/jp-household/),
 based on these data.
@@ -79,29 +79,29 @@ str(meta_info)
 ```
 
     ## List of 6
-    ##  $ tab   :Classes 'tbl_df', 'tbl' and 'data.frame':  1 obs. of  3 variables:
+    ##  $ tab   : tibble [1 x 3] (S3: tbl_df/tbl/data.frame)
     ##   ..$ @code : chr "01"
     ##   ..$ @name : chr "金額"
     ##   ..$ @level: chr ""
-    ##  $ cat01 :Classes 'tbl_df', 'tbl' and 'data.frame':  703 obs. of  5 variables:
+    ##  $ cat01 : tibble [703 x 5] (S3: tbl_df/tbl/data.frame)
     ##   ..$ @code      : chr [1:703] "000100000" "000200000" "000300000" "000400000" ...
     ##   ..$ @name      : chr [1:703] "世帯数分布（抽出率調整）" "集計世帯数" "世帯人員" "18歳未満人員" ...
     ##   ..$ @level     : chr [1:703] "1" "1" "1" "2" ...
     ##   ..$ @unit      : chr [1:703] "一万分比" "世帯" "人" "人" ...
     ##   ..$ @parentCode: chr [1:703] NA NA NA "000300000" ...
-    ##  $ cat02 :Classes 'tbl_df', 'tbl' and 'data.frame':  4 obs. of  3 variables:
+    ##  $ cat02 : tibble [4 x 3] (S3: tbl_df/tbl/data.frame)
     ##   ..$ @code : chr [1:4] "03" "04" "01" "02"
     ##   ..$ @name : chr [1:4] "二人以上の世帯（2000年～）" "二人以上の世帯のうち勤労者世帯（2000年～）" "二人以上の世帯（農林漁家世帯を除く）（1985年～2007年,2017年）" "二人以上の世帯のうち勤労者世帯（農林漁家世帯を除く）（1985年～2007年,2017年）"
     ##   ..$ @level: chr [1:4] "1" "1" "1" "1"
-    ##  $ area  :Classes 'tbl_df', 'tbl' and 'data.frame':  53 obs. of  3 variables:
+    ##  $ area  : tibble [53 x 3] (S3: tbl_df/tbl/data.frame)
     ##   ..$ @code : chr [1:53] "00000" "01003" "02003" "03003" ...
     ##   ..$ @name : chr [1:53] "全国" "01100 札幌市" "02201 青森市" "03201 盛岡市" ...
     ##   ..$ @level: chr [1:53] "1" "1" "1" "1" ...
-    ##  $ time  :Classes 'tbl_df', 'tbl' and 'data.frame':  35 obs. of  3 variables:
+    ##  $ time  : tibble [35 x 3] (S3: tbl_df/tbl/data.frame)
     ##   ..$ @code : chr [1:35] "1985000000" "1986000000" "1987000000" "1988000000" ...
     ##   ..$ @name : chr [1:35] "1985年" "1986年" "1987年" "1988年" ...
     ##   ..$ @level: chr [1:35] "1" "1" "1" "1" ...
-    ##  $ .names:Classes 'tbl_df', 'tbl' and 'data.frame':  5 obs. of  2 variables:
+    ##  $ .names: tibble [5 x 2] (S3: tbl_df/tbl/data.frame)
     ##   ..$ id  : chr [1:5] "tab" "cat01" "cat02" "area" ...
     ##   ..$ name: chr [1:5] "表章項目" "品目分類（27年改定）" "世帯区分（年次－二人以上の世帯）" "地域区分" ...
 
@@ -221,7 +221,8 @@ restaurants.
 
 ## Hamamatsu-city lost championship in grilled eel, too
 
-Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018.
+Hamamatsu-city had been the top of eating the grilled eel in 11 years in
+a row up to 2018.
 
 I search eel to get cat01\_code. It is “010920010”.
 
@@ -256,8 +257,10 @@ To my surprise, Hamamatsu-city is not in the top 3.
 
 ## Persistent victory items are mostly speciality goods
 
-I count the number of cities which get the top rank in 11
-years from 2007 to 2019 for each item.
+I count the number of cities which get the top rank in 11 years from
+2007 to 2019 for each item.
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
 
 ![](README_files/figure-gfm/histogram-1.png)<!-- -->
 
@@ -364,5 +367,11 @@ Wakayama-city, Naha-city and other Kyushu cities, partly due to price
 level differences.
 
 ![](README_files/figure-gfm/total_expenditure-1.png)<!-- -->
+
+I draw the map of 47 prefectures by excluding 5 non-capital cities.
+
+    ## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
+
+![](README_files/figure-gfm/jpn_shp-1.png)<!-- -->
 
 EOL
