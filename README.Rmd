@@ -4,7 +4,6 @@ author: "Mitsuo Shiota"
 date: "2019-04-19"
 output: 
   github_document:
-    
     toc: TRUE
 editor_options: 
   chunk_output_type: console
@@ -23,13 +22,13 @@ Warning: If you can't read Japanese, it would be very difficult for you to follo
 
 ## Summary
 
-I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. That is an annual routine news report. Utsunomiya-city defeated last-year-champion Hamamatsu-city in 2019 [(Japanese)](https://www.at-s.com/news/article/topics/shizuoka/734708.html), based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
+I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. This is an annual routine news report. In 2020, Hamamatsu-city  came back to the top rank  [(Japanese)](https://www.at-s.com/news/article/economy/shizuoka/858406.html), based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
 
-I find that persistent winning items are speciality goods of each city. I list the top earners in 2019. I draw ranks distribution in each city in 2019. And I argue ranks distribution is partly due to total expenditure differences.
+I find that persistent winning items are speciality goods of each city. I list the top earners in 2020. I draw ranks distribution in each city in 2020. And I argue ranks distribution is partly due to total expenditure differences.
 
 ```{r libraries, include=FALSE}
 library(tidyverse)
-
+library(scales)
 ```
 
 ## Get meta data
@@ -40,14 +39,14 @@ I had to register and get appID, following the instructions in [this page (Japan
 keyring::key_set("e-stat")
 
 ```
-I search around in Family Income and Expenditure Survey, and manage to know the statsDataId of the appropriate table is "0003125169" from [this page (Japanese)](https://www.e-stat.go.jp/stat-search/database?page=1&layout=datalist&toukei=00200561&tstat=000000330001&cycle=7&tclass1=000000330001&tclass2=000000330004&statdisp_id=0003125169&result_page=1&second2=1). As I mentioned in the warning in the top, I failed to set lang = "E", so I set "J" instead.
+I search around in Family Income and Expenditure Survey, and manage to know the statsDataId of the appropriate table is "0003348239" from [this page (Japanese)](https://www.e-stat.go.jp/stat-search/database?page=1&layout=datalist&toukei=00200561&tstat=000000330001&cycle=7&tclass1=000000330001&tclass2=000000330004&statdisp_id=0003348239&result_page=1&tclass3val=0). As I mentioned in the warning in the top, I failed to set lang = "E", so I set "J" instead.
 
 Look at the structure of the response. It is a list of 6 data frames. estat_getStatsData function, which I will use later, utilizes @code and @name in each data frame, and add @name. In this case, I would like to keep @level in cat01. I make lookup table for cat01, and drop "@" in the column names. I can check which level I should use, and search "ぎょうざ".
 
 ```{r get_meta_data, cache=FALSE}
 meta_info <- estatapi::estat_getMetaInfo(appId = keyring::key_get("e-stat"),
                                lang = "J",
-                               statsDataId = "0003125169")
+                               statsDataId = "0003348239")
 
 str(meta_info)
 
@@ -74,7 +73,7 @@ As the maximum records per GET is set to 100000, I must repeat five times in thi
 content <- estatapi::estat_getStatsData(
   appId = keyring::key_get("e-stat"),
   lang = "J",
-  statsDataId = "0003125169")
+  statsDataId = "0003348239")
 
 # add level column
 temp <- lookup_cat01 %>% 
@@ -88,7 +87,8 @@ expenditure <- content %>%
   rename(city = 地域区分)
 
 ```
-## Confirm the Utsunomiya-city's victory in dumplings
+
+## Confirm the Hamamatsu-city's victory in dumplings
 
 According to [this page (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.html), the sample numbers per city are approximately 100 except Tokyo (408 samples). If I assume the standard deviation is 30 percent of the mean, the standard error ratio (ratio of standard deviation of mean estimates to the estimated mean) is 3 percent. Table 1-1 in [this page](https://www.stat.go.jp/data/kakei/hyohonkekka.html) publish the standard error ratios in cat01 of level less than 3 in 2013 survey, and the numbers do not contradict my assumption of 3 percent standard error ratio for cat01 of level 5. 
 
@@ -96,7 +96,7 @@ According to [this page (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.htm
 # 010920070 371 ぎょうざ
 top10city <- expenditure %>% 
   filter(cat01_code == "010920070") %>% 
-  filter(year == 2019, area_code != "00000") %>% 
+  filter(year == 2020, area_code != "00000") %>% 
   select(city, value) %>% 
   arrange(desc(value)) %>% 
   top_n(10)
@@ -105,7 +105,7 @@ top10city
 
 ```
 
-The battle between Hamamatsu-city and Utsunomiya-city is not just in 2019, but has a long history. Let us draw all available years of top 10 cities in 2019.
+The battle between Hamamatsu-city and Utsunomiya-city is not just in 2020, but has a long history. Let us draw all available years of top 10 cities in 2020.
 
 ```{r line_chart, echo=FALSE, fig.width=6, fig.width=8}
 expenditure %>% 
@@ -115,8 +115,8 @@ expenditure %>%
   geom_line() +
   labs(
     title = "Annual dumpling expenditure", 
-    x = "", y = "yen per household",
-    color = ""
+    x = NULL, y = "yen per household",
+    color = NULL
   )
 
 ```
@@ -124,9 +124,9 @@ The differences between top 2 and the rest are narrowing.
 
 By the way, these expenditures don't include dumplings you eat at the restaurants.
 
-## Hamamatsu-city lost championship in grilled eel, too
+## Hamamatsu-city regained championship in grilled eel, too
 
-Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018.
+Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018. It lost the top position in 2019, and regained it in 2020.
 
 I search eel to get cat01_code. It is "010920010".
 
@@ -159,11 +159,11 @@ area_ranks %>%
   t()
 
 ```
-To my surprise, Hamamatsu-city is not in the top 3.
+
 
 ## Persistent victory items are mostly speciality goods
 
-I count the number of cities which get the top rank in 11 years from 2007 to 2019 for each item.
+I count the number of cities which get the top rank in 14 years from 2007 to 2020 for each item.
 
 ```{r histogram, echo=FALSE, fig.width=6, fig.height=6}
 n_top <- area_ranks %>% 
@@ -174,7 +174,7 @@ n_top <- area_ranks %>%
 n_top %>% 
   ggplot(aes(x = n_unique_cities)) +
   geom_histogram(binwidth = 1) +
-  coord_cartesian(xlim = c(1, 12))
+  coord_cartesian(xlim = c(1, 14))
 
 ```
 
@@ -187,38 +187,38 @@ There are `r nrow(n_top_1)` items where one city keeps the top rank. Most of the
 
 ```{r speciality goods, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2019) %>% 
+  filter(ranks == 1, year == 2020) %>% 
   semi_join(n_top_1, by = "cat01_code") %>% 
-  select(cat01_code, `品目分類（27年改定）`, city) %>% 
+  select(cat01_code, `品目分類（2020年改定）`, city) %>% 
   print(n=Inf)
 
 ```
 
-## Who are the top earners in 2019?
+## Who are the top rank earners in 2020?
 
-In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2019?
+In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2020?
 
 ```{r top_counts, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2019) %>% 
+  filter(ranks == 1, year == 2020) %>% 
   group_by(city) %>% 
   count(sort = TRUE) %>% 
   print(n=Inf)
 
 ```
 
-## Ranks distribution in each city in 2019
+## Ranks distribution in each city in 2020
 
-I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2019. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
+I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2020. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
 
 ```{r histogram2, echo=FALSE, fig.width=10, fig.height=8}
 area_ranks %>% 
-  filter(year == 2019) %>% 
+  filter(year == 2020) %>% 
   ggplot(aes(x = ranks)) +
   geom_histogram(boundary= 0.5, binwidth = 4) +
   facet_wrap(~ city) +
   coord_cartesian(xlim = c(1, 52)) +
-  labs(title = "Ranks distribution in 52 cities in 2019")
+  labs(title = "Ranks distribution in 52 cities in 2020")
 
 ```
 This pattern reflects that total expenditures are high in Kanto, and low in Wakayama-city, Naha-city and other Kyushu cities, partly due to price level differences.
@@ -226,28 +226,29 @@ This pattern reflects that total expenditures are high in Kanto, and low in Waka
 ```{r total_expenditure, echo=FALSE, results="hide", fig.width=8, fig.height=10}
 expenditure %>% 
   filter(level == 1) %>% 
-  select(cat01_code, `品目分類（27年改定）`) %>% 
+  select(cat01_code, `品目分類（2020年改定）`) %>% 
   unique()
 
 national <- expenditure %>% 
   filter(cat01_code == "001100000") %>%
-  filter(year == 2019, area_code == "00000", cat02_code == "03") %>% 
+  filter(year == 2020, area_code == "00000", cat02_code == "03") %>% 
   select(value) %>%
   as.numeric()
 
 expenditure %>% 
   filter(cat01_code == "001100000") %>% #消費支出
-  filter(year == 2019, area_code != "00000") %>% 
+  filter(year == 2020, area_code != "00000") %>% 
   ggplot(aes(x = fct_reorder(city, value), y = value)) +
   geom_hline(yintercept = national,
              color = "white", size = 2) +
   geom_point() +
-  annotate("text", x = "23100 名古屋市", y = national + 190000,
+  annotate("text", x = "37201 高松市", y = national + 100000,
            label = "national mean") +
+  scale_y_continuous(labels = comma) +
   coord_flip() +
   labs(
     title = "Total expenditure",
-    x = "",
+    x = NULL,
     y = "yen per year per household"
   )
 
@@ -264,7 +265,7 @@ japan_shp <- st_read(system.file("shapes/jpn.shp", package="NipponMap"))
 exp_only_capital <- expenditure %>% 
   filter(!area_code %in% c("00000", "14004", "14150", "22004", "27004", "40003")) %>% #全国、川崎市、相模原市、浜松市、堺市、北九州市
   filter(cat01_code == "001100000") %>% #消費支出
-  filter(year == 2019) %>% 
+  filter(year == 2020) %>% 
   arrange(area_code)
 
 japan_shp %>% 
@@ -282,17 +283,16 @@ japan_shp %>%
 # save expense for Shiny app
 expense <- expenditure %>% 
   filter(unit == "円", cat02_code == "03", year >= 2007) %>% 
-  rename(cat01 = `品目分類（27年改定）`)
+  rename(cat01 = `品目分類（2020年改定）`)
 
 cities <- expense %>% 
   select(city) %>% 
   unique()
 
 cities %>% 
-  write.csv("data/cities.csv", row.names = FALSE, fileEncoding = "CP932")
+  write.csv("data/cities.csv", row.names = FALSE)
 
-cities_e <- read_csv("data/cities_e.csv", 
-    locale = locale(encoding = "SHIFT-JIS"))
+cities_e <- read_csv("data/cities_e.csv")
 
 expense <- expense %>% 
   left_join(cities_e, by = "city")

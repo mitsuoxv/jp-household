@@ -12,6 +12,7 @@ library(shiny)
 library(tidyverse)
 library(NipponMap)
 library(sf)
+library(scales)
 
 # read map data
 japan_shp <- st_read(system.file("shapes/jpn.shp", package="NipponMap"))
@@ -82,8 +83,8 @@ ui <- navbarPage("City competition to consume",
             sliderInput("year",
                         label = h3("Select year"), 
                         min = 2007,
-                        max = 2019,
-                        value = 2019,
+                        max = 2020,
+                        value = 2020,
                         sep = ""),
             
             hr(),
@@ -154,6 +155,7 @@ server <- function(input, output, session) {
             annotate("text", x = "26100 Kyoto", y = national_average,
                      label = "National average") +
             guides(fill = "none") +
+            scale_y_continuous(labels = comma) +
             coord_flip() +
             labs(
                 x = "", y = "annual expenditure per household (yen)"
