@@ -85,7 +85,8 @@ ui <- navbarPage("City competition to consume",
                         min = 2007,
                         max = 2020,
                         value = 2020,
-                        sep = ""),
+                        sep = "",
+                        animate = TRUE),
             
             hr(),
             
