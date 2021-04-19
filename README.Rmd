@@ -29,6 +29,9 @@ I find that persistent winning items are speciality goods of each city. I list t
 ```{r libraries, include=FALSE}
 library(tidyverse)
 library(scales)
+
+library(NipponMap)
+library(sf)
 ```
 
 ## Get meta data
@@ -285,19 +288,69 @@ expense <- expenditure %>%
   filter(unit == "円", cat02_code == "03", year >= 2007) %>% 
   rename(cat01 = `品目分類（2020年改定）`)
 
-cities <- expense %>% 
-  select(city) %>% 
-  unique()
+# cities <- expense %>% 
+#   select(city) %>% 
+#   unique()
+# 
+# cities %>% 
+#   write.csv("data-raw/cities.csv", row.names = FALSE)
 
-cities %>% 
-  write.csv("data/cities.csv", row.names = FALSE)
-
-cities_e <- read_csv("data/cities_e.csv")
+cities_e <- read_csv("data-raw/cities_e.csv")
 
 expense <- expense %>% 
   left_join(cities_e, by = "city")
 
-saveRDS(expense, file = "data/expense.rds")
+# read map data
+prefectures_map <-
+  st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
+
+# create level list
+level_list <- function(i) {
+  temp <- expense %>%
+    filter(level == i) %>%
+    select(cat01, cat01_code) %>%
+    unique()
+  
+  split(temp$cat01_code, temp$cat01)
+}
+
+cat01_code_level <- vector("list", 5)
+
+for (i in seq_along(cat01_code_level)) {
+  temp <- expense %>%
+    filter(level == i) %>%
+    select(cat01, cat01_code) %>%
+    unique()
+  
+  cat01_code_level[[i]] <- split(temp$cat01_code, temp$cat01)
+}
+
+# create city list
+temp <- expense %>%
+  filter(area_code != "00000") %>%
+  select(city, city_e) %>%
+  unique()
+
+city_list <- split(temp$city_e, temp$city)
+
+# test
+area_ranks <- expense %>%
+  filter(level == 5) %>%
+  filter(area_code != "00000") %>%
+  group_by(year, cat01_code) %>%
+  mutate(ranks = rank(desc(value), ties.method = "average")) %>%
+  ungroup()
+
+# make a list
+japan <- list(
+  map_df = prefectures_map,
+  expense = expense,
+  cat01_code_level = cat01_code_level,
+  city_list = city_list,
+  area_ranks = area_ranks
+)
+
+save(japan, file = "data/japan.rda")
 
 ```
 
