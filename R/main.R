@@ -77,7 +77,7 @@ mainApp <- function() {
         sidebarPanel(
           selectInput("select_city",
             label = h3("Select city"),
-            choices = japan$city_list
+            choices = japan$city_menu
           ),
   
           hr(),

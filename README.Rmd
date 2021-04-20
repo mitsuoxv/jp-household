@@ -300,38 +300,30 @@ cities_e <- read_csv("data-raw/cities_e.csv")
 expense <- expense %>% 
   left_join(cities_e, by = "city")
 
+expense <- expense %>% 
+  select(level, cat01_code, cat01, area_code, city, city_e, year, value)
+
 # read map data
 prefectures_map <-
   st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
 
-# create level list
-level_list <- function(i) {
-  temp <- expense %>%
-    filter(level == i) %>%
-    select(cat01, cat01_code) %>%
-    unique()
-  
-  split(temp$cat01_code, temp$cat01)
-}
-
+# create a list of item menu by level
 cat01_code_level <- vector("list", 5)
 
 for (i in seq_along(cat01_code_level)) {
-  temp <- expense %>%
+  df <- expense %>%
     filter(level == i) %>%
-    select(cat01, cat01_code) %>%
-    unique()
+    distinct(cat01, cat01_code)
   
-  cat01_code_level[[i]] <- split(temp$cat01_code, temp$cat01)
+  named_vector <- df$cat01_code
+  names(named_vector) <- df$cat01
+  
+  cat01_code_level[[i]] <- named_vector
 }
 
-# create city list
-temp <- expense %>%
-  filter(area_code != "00000") %>%
-  select(city, city_e) %>%
-  unique()
-
-city_list <- split(temp$city_e, temp$city)
+# create city menu
+city_menu <- cities_e %>% slice(-1) %>% pull(city_e)
+names(city_menu) <- cities_e %>% slice(-1) %>% pull(city)
 
 # test
 area_ranks <- expense %>%
@@ -346,7 +338,7 @@ japan <- list(
   map_df = prefectures_map,
   expense = expense,
   cat01_code_level = cat01_code_level,
-  city_list = city_list,
+  city_menu = city_menu,
   area_ranks = area_ranks
 )
 
