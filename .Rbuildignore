@@ -1,0 +1,10 @@
+^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
+^google-analytics\.html$
+^output$
+^README.*$
+^rsconnect$
+^appFileManifest$
+^app\.R$
+^data-raw$

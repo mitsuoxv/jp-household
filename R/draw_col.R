@@ -1,25 +1,33 @@
+#' Draw column chart
+#'
+#' @param df A data frame.
+#'
+#' @return A plot.
+#'
+#' @examples
+#' \dontrun{
+#' draw_col(data())
+#' }
 draw_col <- function(df) {
   national_average <- df %>%
-    filter(area_code == "00000") %>%
-    pull(value)
+    dplyr::filter(area_code == "00000") %>%
+    dplyr::pull(value)
   
   stopifnot(length(national_average) == 1)
   
   df %>%
-      filter(area_code != "00000") %>%
-      mutate(loser = !near(value, max(value))) %>%
-      ggplot(aes(value, fct_rev(city_e), fill = loser)) +
-      geom_col(width = 1) +
-      geom_vline(xintercept = national_average,
+    dplyr::filter(area_code != "00000") %>%
+    dplyr::mutate(loser = (value != max(value))) %>%
+    ggplot2::ggplot(ggplot2::aes(value, forcats::fct_rev(city_e), fill = loser)) +
+    ggplot2::geom_col(width = 1) +
+    ggplot2::geom_vline(xintercept = national_average,
                  color = "white",
                  size = 1) +
-      annotate("text",
+    ggplot2::annotate("text",
                y = "26100 Kyoto",
                x = national_average,
                label = "National average") +
-      guides(fill = "none") +
-      scale_x_continuous(labels = comma) +
-      labs(x = "annual expenditure per household (yen)", y = NULL)
+    ggplot2::guides(fill = "none") +
+    ggplot2::scale_x_continuous(labels = scales::comma) +
+    ggplot2::labs(x = "annual expenditure per household (yen)", y = NULL)
 }
-
-

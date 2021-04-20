@@ -350,7 +350,7 @@ japan <- list(
   area_ranks = area_ranks
 )
 
-save(japan, file = "data/japan.rda")
+usethis::use_data(japan, overwrite = TRUE)
 
 ```
 
