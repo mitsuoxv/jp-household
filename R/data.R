@@ -14,6 +14,7 @@
 #' \item{city_e}{"National"}
 #' \item{year}{2007}
 #' \item{value}{3573382}
+#' \item{ranks}{NA, available only for level 5 and not 全国}
 #' }
 #' }
 #' \item{map_df}{
@@ -25,20 +26,6 @@
 #' \item{population}{5506419}
 #' \item{region}{"Hokkaido"}
 #' \item{geometry}{sf data}
-#' }
-#' }
-#' \item{area_ranks}{
-#' @format A tibble.
-#' \describe{
-#' \item{level}{5}
-#' \item{cat01_code}{"010120010"}
-#' \item{cat01}{"120 食パン"}
-#' \item{area_code}{"01003"}
-#' \item{city}{"01100 札幌市"}
-#' \item{city_e}{"01100 Sapporo"}
-#' \item{year}{2007}
-#' \item{value}{6647}
-#' \item{ranks}{43}
 #' }
 #' }
 #' \item{cat01_code_level}{

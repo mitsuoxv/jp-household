@@ -87,7 +87,8 @@ showMapServer <- function(id) {
           cat01_code == input$select,
           year == input$year
         )
-    })
+    }) %>% 
+      bindCache(input$select, input$year)
     
     output$barPlot <- renderPlot(draw_col(data()), res = 96)
     
