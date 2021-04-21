@@ -14,11 +14,11 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
     dplyr,
-    DT,
     forcats,
     ggplot2,
     magrittr,
     pkgload,
+    plotly,
     scales,
     sf,
     shiny

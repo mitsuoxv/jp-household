@@ -4,7 +4,9 @@ NAMESPACE
 R/data.R
 R/draw_col.R
 R/draw_map.R
+R/findItem.R
 R/main.R
+R/showMap.R
 R/utils-pipe.R
 data/japan.rda
 google-analytics.html
