@@ -327,7 +327,6 @@ names(city_menu) <- cities_e %>% slice(-1) %>% pull(city)
 
 # add ranks column
 area_ranks <- expense %>%
-  filter(level == 5) %>%
   filter(area_code != "00000") %>%
   group_by(year, cat01_code) %>%
   mutate(ranks = rank(desc(value), ties.method = "average")) %>%
@@ -337,12 +336,17 @@ area_ranks <- expense %>%
 expense2 <- expense %>% 
   left_join(area_ranks, by = c("cat01_code", "area_code", "year"))
 
+# level_menu
+level_menu <- 1:5
+names(level_menu) <- paste0("level ", 1:5)
+
 # make a list
 japan <- list(
   map_df = prefectures_map,
   expense = expense2,
   cat01_code_level = cat01_code_level,
-  city_menu = city_menu
+  city_menu = city_menu,
+  level_menu = level_menu
 )
 
 usethis::use_data(japan, overwrite = TRUE)

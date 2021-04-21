@@ -9,14 +9,11 @@
 #' showMapUI("item")
 #' }
 showMapUI <- function(id) {
-  level_menu <- 1:5
-  names(level_menu) <- paste0("level ", 1:5)
-  
   sidebarLayout(
     sidebarPanel(
-      radioButtons(NS(id, "radio"),
+      radioButtons(NS(id, "level"),
                    label = h3("Select item level"),
-                   choices = level_menu,
+                   choices = japan$level_menu,
                    selected = 1
       ),
       
@@ -75,7 +72,7 @@ showMapServer <- function(id) {
   moduleServer(id, function(input, output, session) {
     observe({
       updateSelectInput(session, "select",
-                        choices = japan$cat01_code_level[[as.numeric(input$radio)]]
+                        choices = japan$cat01_code_level[[as.numeric(input$level)]]
       )
     })
     

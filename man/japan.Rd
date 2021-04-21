@@ -19,7 +19,7 @@ A tibble.
 \item{city_e}{"National"}
 \item{year}{2007}
 \item{value}{3573382}
-\item{ranks}{NA, available only for level 5 and not 全国}
+\item{ranks}{43, NA for 全国}
 }
 }
 \item{map_df}{
@@ -51,6 +51,13 @@ A list.
 A named character vector. Length is 52.
 \describe{
 \item{01100 札幌市}{"01100 Sapporo"}
+}
+}
+\item{level_menu}{
+
+A named numeric vector. Length is 5.
+\describe{
+\item{1}{"level 1"}
 }
 }
 }

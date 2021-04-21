@@ -18,6 +18,14 @@ findItemUI <- function(id) {
       
       hr(),
       
+      radioButtons(NS(id, "level"),
+                   label = h3("Select item level"),
+                   choices = japan$level_menu,
+                   selected = 5
+      ),
+      
+      hr(),
+      
       sliderInput(NS(id, "year_range"),
                   label = h4("Select year range"),
                   min = 2007,
@@ -49,13 +57,13 @@ findItemServer <- function(id) {
     city_data <- reactive({
       japan$expense %>%
         dplyr::filter(
-          level == 5,
+          level == input$level,
           city_e == input$select_city,
           year >= input$year_range[1],
           year <= input$year_range[2]
           )
     }) %>% 
-      bindCache(input$select_city, input$year_range)
+      bindCache(input$level, input$select_city, input$year_range)
     
     output$linePlot <- plotly::renderPlotly({
       hot_items <- city_data() %>% 
@@ -70,7 +78,7 @@ findItemServer <- function(id) {
         ggplot2::geom_jitter(ggplot2::aes(color = cat01, alpha = value), width = 0) +
         ggplot2::scale_y_reverse() +
         ggplot2::labs(title = "10 items with high average rank in this year range",
-                      x = "Note: level 5 items only, value: yen per year per household",
+                      x = "value: yen per year per household",
                       color = NULL, alpha = NULL)
       
       plotly::ggplotly(p)
