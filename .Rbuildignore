@@ -8,3 +8,4 @@
 ^appFileManifest$
 ^app\.R$
 ^data-raw$
+^\.github$

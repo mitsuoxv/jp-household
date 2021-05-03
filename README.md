@@ -17,7 +17,12 @@ Mitsuo Shiota
 -   [Ranks distribution in each city in
     2020](#ranks-distribution-in-each-city-in-2020)
 
-Updated: 2021-02-05
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/mitsuoxv/jp-household/workflows/R-CMD-check/badge.svg)](https://github.com/mitsuoxv/jp-household/actions)
+<!-- badges: end -->
+
+Updated: 2021-05-03
 
 I have made [shinyapps.io](https://mitsuoxv.shinyapps.io/jp-household/),
 based on these data.
