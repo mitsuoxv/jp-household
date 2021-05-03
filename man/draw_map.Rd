@@ -4,10 +4,10 @@
 \alias{draw_map}
 \title{Draw Japan prefecture map}
 \usage{
-draw_map(df)
+draw_map(vec)
 }
 \arguments{
-\item{df}{A data frame.}
+\item{vec}{A numeric vector of length 47 in order of jiscode.}
 }
 \value{
 A plot.

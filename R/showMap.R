@@ -91,8 +91,9 @@ showMapServer <- function(id) {
     
     output$mapPlot <- renderPlot(draw_map(
       data() %>% 
-        dplyr::filter(!area_code %in% c("00000", "14004", "14150", "22004", "27004", "40003"))
+        dplyr::filter(!area_code %in% c("00000", "14004", "14150", "22004", "27004", "40003")) %>% 
         # exclude 全国、川崎市、相模原市、浜松市、堺市、北九州市
+        dplyr::pull(value)
       ), res = 96)
   })
 }
