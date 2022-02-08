@@ -29,8 +29,8 @@ findItemUI <- function(id) {
       sliderInput(NS(id, "year_range"),
                   label = h4("Select year range"),
                   min = 2007,
-                  max = 2020,
-                  value = c(2007, 2020),
+                  max = 2021,
+                  value = c(2007, 2021),
                   sep = ""
       )
     ),
@@ -75,8 +75,9 @@ findItemServer <- function(id) {
         dplyr::semi_join(hot_items, by = "cat01_code") %>% 
         dplyr::select(year, ranks, cat01, value) %>% 
         ggplot2::ggplot(ggplot2::aes(year, ranks)) +
-        ggplot2::geom_jitter(ggplot2::aes(color = cat01, alpha = value), width = 0) +
-        ggplot2::scale_y_reverse() +
+        ggplot2::geom_jitter(ggplot2::aes(color = cat01, alpha = value),
+                             width = 0.2, height = 0) +
+        ggplot2::scale_y_reverse(breaks = c(1, seq(5, 50, 5))) +
         ggplot2::labs(title = "10 items with high average rank in this year range",
                       x = "value: yen per year per household",
                       color = NULL, alpha = NULL)
