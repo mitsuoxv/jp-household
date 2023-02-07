@@ -30,8 +30,8 @@ showMapUI <- function(id) {
       sliderInput(NS(id, "year"),
                   label = h3("Select year"),
                   min = 2007,
-                  max = 2021,
-                  value = 2021,
+                  max = 2022,
+                  value = 2022,
                   sep = "",
                   animate = TRUE
       ),

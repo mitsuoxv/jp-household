@@ -24,9 +24,9 @@ Warning: If you can't read Japanese, it would be very difficult for you to follo
 
 ## Summary
 
-I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. This is an annual routine news report. In 2021, Hamamatsu-city lost the top rank to Miyazaki-city  [(Japanese)](https://www.at-s.com/news/article/shizuoka/1023689.html), based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
+I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. This is an annual routine news report. In 2022, Miyazaki-city kept the top rank for two years in a row  [(Japanese)](https://www.at-s.com/news/article/shizuoka/1190039.html), based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
 
-I find that persistent winning items are speciality goods of each city. I list the top earners in 2021. I draw ranks distribution in each city in 2021. And I argue ranks distribution is partly due to total expenditure differences.
+I find that persistent winning items are speciality goods of each city. I list the top earners in 2022. I draw ranks distribution in each city in 2022. And I argue ranks distribution is partly due to total expenditure differences.
 
 ```{r libraries, include=FALSE}
 library(tidyverse)
@@ -95,7 +95,7 @@ expenditure <- content %>%
 
 ```
 
-## Confirm the Hamamatsu-city's loss in dumplings
+## Confirm the Miyazaki-city's win in dumplings
 
 According to [this page (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.html), the sample numbers per city are approximately 100 except Tokyo (408 samples). If I assume the standard deviation is 30 percent of the mean, the standard error ratio (ratio of standard deviation of mean estimates to the estimated mean) is 3 percent. Table 1-1 in [this page](https://www.stat.go.jp/data/kakei/hyohonkekka.html) publish the standard error ratios in cat01 of level less than 3 in 2013 survey, and the numbers do not contradict my assumption of 3 percent standard error ratio for cat01 of level 5. 
 
@@ -103,7 +103,7 @@ According to [this page (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.htm
 # 010920070 371 ぎょうざ
 top10city <- expenditure %>% 
   filter(cat01_code == "010920070") %>% 
-  filter(year == 2021, area_code != "00000") %>% 
+  filter(year == 2022, area_code != "00000") %>% 
   select(city, value) %>% 
   arrange(desc(value)) %>% 
   slice_head(n = 10)
@@ -112,7 +112,7 @@ top10city
 
 ```
 
-Miyazaki-city won in 2021, but the battle between Hamamatsu-city and Utsunomiya-city has a long history. Let us draw all available years of top 10 cities in 2021.
+Miyazaki-city won in 2021 and 2022, but is a relatively new comer. The battle between Utsunomiya-city and Hamamatsu-city has a long history. Let us draw all available years of top 10 cities in 2022.
 
 ```{r line_chart, echo=FALSE, fig.width=6, fig.width=8}
 expenditure %>% 
@@ -132,9 +132,9 @@ Hamamatsu-city has been rather stable since 2017, but Miyazaki-city has risen ra
 
 By the way, these expenditures don't include dumplings you eat at the restaurants.
 
-## Hamamatsu-city lost championship in grilled eel, either
+## Hamamatsu-city could not regain championship in grilled eel
 
-Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018. It lost the top position in 2019, regained it in 2020, and lost again in 2021.
+Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018. It lost the top position in 2019, regained it in 2020, lost again in 2021, and remained second in 2022.
 
 I search eel to get cat01_code. It is "010920010".
 
@@ -168,11 +168,11 @@ area_ranks %>%
 
 ```
 
-Kyoto-city was the top in 2021.
+Kyoto-city was the top in 2021 and 2022.
 
 ## Persistent victory items are mostly speciality goods
 
-I count the number of cities which get the top rank in 15 years from 2007 to 2021 for each item.
+I count the number of cities which get the top rank in 15 years from 2007 to 2022 for each item.
 
 ```{r histogram, echo=FALSE, fig.width=6, fig.height=6}
 n_top <- area_ranks %>% 
@@ -196,38 +196,38 @@ There are `r nrow(n_top_1)` items where one city keeps the top rank. Most of the
 
 ```{r speciality goods, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2021) %>% 
+  filter(ranks == 1, year == 2022) %>% 
   semi_join(n_top_1, by = "cat01_code") %>% 
   select(cat01_code, `品目分類（2020年改定）`, city) %>% 
   print(n=Inf)
 
 ```
 
-## Who are the top rank earners in 2021?
+## Who are the top rank earners in 2022?
 
-In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2021?
+In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2022?
 
 ```{r top_counts, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2021) %>% 
+  filter(ranks == 1, year == 2022) %>% 
   group_by(city) %>% 
   count(sort = TRUE) %>% 
   print(n=Inf)
 
 ```
 
-## Ranks distribution in each city in 2021
+## Ranks distribution in each city in 2022
 
-I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2021. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
+I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2022. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
 
 ```{r histogram2, echo=FALSE, fig.width=10, fig.height=8}
 area_ranks %>% 
-  filter(year == 2021) %>% 
+  filter(year == 2022) %>% 
   ggplot(aes(x = ranks)) +
   geom_histogram(boundary= 0.5, binwidth = 4) +
   facet_wrap(~ city) +
   coord_cartesian(xlim = c(1, 52)) +
-  labs(title = "Ranks distribution in 52 cities in 2021")
+  labs(title = "Ranks distribution in 52 cities in 2022")
 
 ```
 This pattern reflects that total expenditures are high in Kanto, and low in Wakayama-city, Naha-city and other Kyushu cities, partly due to price level differences.
@@ -240,13 +240,13 @@ expenditure %>%
 
 national <- expenditure %>% 
   filter(cat01_code == "001100000") %>%
-  filter(year == 2021, area_code == "00000", cat02_code == "03") %>% 
+  filter(year == 2022, area_code == "00000", cat02_code == "03") %>% 
   select(value) %>%
   as.numeric()
 
 expenditure %>% 
   filter(cat01_code == "001100000") %>% #消費支出
-  filter(year == 2021, area_code != "00000") %>% 
+  filter(year == 2022, area_code != "00000") %>% 
   ggplot(aes(x = fct_reorder(city, value), y = value)) +
   geom_hline(yintercept = national,
              color = "white", size = 2) +
@@ -272,7 +272,7 @@ japan_shp <- st_read(system.file("shapes/jpn.shp", package="NipponMap"))
 exp_only_capital <- expenditure %>% 
   filter(!area_code %in% c("00000", "14004", "14150", "22004", "27004", "40003")) %>% #全国、川崎市、相模原市、浜松市、堺市、北九州市
   filter(cat01_code == "001100000") %>% #消費支出
-  filter(year == 2021) %>% 
+  filter(year == 2022) %>% 
   arrange(area_code)
 
 japan_shp %>% 

@@ -22,7 +22,7 @@ draw_col <- function(df) {
     ggplot2::geom_col(width = 1) +
     ggplot2::geom_vline(xintercept = national_average,
                  color = "white",
-                 size = 1) +
+                 linewidth = 1) +
     ggplot2::annotate("text",
                y = "26100 Kyoto",
                x = national_average,
