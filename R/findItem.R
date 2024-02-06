@@ -29,8 +29,8 @@ findItemUI <- function(id) {
       sliderInput(NS(id, "year_range"),
                   label = h4("Select year range"),
                   min = 2007,
-                  max = 2022,
-                  value = c(2007, 2022),
+                  max = 2023,
+                  value = c(2007, 2023),
                   sep = ""
       )
     ),
