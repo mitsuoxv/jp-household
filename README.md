@@ -3,31 +3,26 @@ Japan Family Income and Expenditure Survey, city competition
 Mitsuo Shiota
 2019-04-19
 
-- <a href="#summary" id="toc-summary">Summary</a>
-- <a href="#get-meta-data" id="toc-get-meta-data">Get meta data</a>
-- <a href="#get-data" id="toc-get-data">Get data</a>
-- <a href="#confirm-the-miyazaki-citys-win-in-dumplings"
-  id="toc-confirm-the-miyazaki-citys-win-in-dumplings">Confirm the
-  Miyazaki-city’s win in dumplings</a>
-- <a href="#hamamatsu-city-could-not-regain-championship-in-grilled-eel"
-  id="toc-hamamatsu-city-could-not-regain-championship-in-grilled-eel">Hamamatsu-city
-  could not regain championship in grilled eel</a>
-- <a href="#persistent-victory-items-are-mostly-speciality-goods"
-  id="toc-persistent-victory-items-are-mostly-speciality-goods">Persistent
-  victory items are mostly speciality goods</a>
-- <a href="#who-are-the-top-rank-earners-in-2022"
-  id="toc-who-are-the-top-rank-earners-in-2022">Who are the top rank
-  earners in 2022?</a>
-- <a href="#ranks-distribution-in-each-city-in-2022"
-  id="toc-ranks-distribution-in-each-city-in-2022">Ranks distribution in
-  each city in 2022</a>
+- [Summary](#summary)
+- [Get meta data](#get-meta-data)
+- [Get data](#get-data)
+- [Confirm the Hamamatsu-city’s come-back win in
+  dumplings](#confirm-the-hamamatsu-citys-come-back-win-in-dumplings)
+- [Hamamatsu-city also regained championship in grilled
+  eel](#hamamatsu-city-also-regained-championship-in-grilled-eel)
+- [Persistent victory items are mostly speciality
+  goods](#persistent-victory-items-are-mostly-speciality-goods)
+- [Who are the top rank earners in
+  2023?](#who-are-the-top-rank-earners-in-2023)
+- [Ranks distribution in each city in
+  2023](#ranks-distribution-in-each-city-in-2023)
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mitsuoxv/jp-household/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mitsuoxv/jp-household/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Updated: 2023-02-07
+Updated: 2024-02-06
 
 I have made [shinyapps.io](https://mitsuoxv.shinyapps.io/jp-household/),
 based on these data.
@@ -44,9 +39,8 @@ instead.
 
 I hear which city in Japan consumed most dumplings (gyouza in Japanese,
 and jiaozi in Chinese) per household last year. This is an annual
-routine news report. In 2022, Miyazaki-city kept the top rank for two
-years in a row
-[(Japanese)](https://www.at-s.com/news/article/shizuoka/1190039.html),
+routine news report. In 2023, Hamamatsu-city came back to the top rank
+[(Japanese)](https://www.at-s.com/news/article/shizuoka/1408002.html),
 based on [Family Income and Expenditure
 Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics
 Bureau, Ministry of Internal Affairs and Communications. So I get data
@@ -54,8 +48,8 @@ from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by
 yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
 
 I find that persistent winning items are speciality goods of each city.
-I list the top earners in 2022. I draw ranks distribution in each city
-in 2022. And I argue ranks distribution is partly due to total
+I list the top earners in 2023. I draw ranks distribution in each city
+in 2023. And I argue ranks distribution is partly due to total
 expenditure differences.
 
 ## Get meta data
@@ -109,10 +103,10 @@ str(meta_info)
     ##   ..$ @code : chr [1:53] "00000" "01003" "02003" "03003" ...
     ##   ..$ @name : chr [1:53] "全国" "01100 札幌市" "02201 青森市" "03201 盛岡市" ...
     ##   ..$ @level: chr [1:53] "1" "1" "1" "1" ...
-    ##  $ time  : tibble [38 × 3] (S3: tbl_df/tbl/data.frame)
-    ##   ..$ @code : chr [1:38] "1985000000" "1986000000" "1987000000" "1988000000" ...
-    ##   ..$ @name : chr [1:38] "1985年" "1986年" "1987年" "1988年" ...
-    ##   ..$ @level: chr [1:38] "1" "1" "1" "1" ...
+    ##  $ time  : tibble [39 × 3] (S3: tbl_df/tbl/data.frame)
+    ##   ..$ @code : chr [1:39] "1985000000" "1986000000" "1987000000" "1988000000" ...
+    ##   ..$ @name : chr [1:39] "1985年" "1986年" "1987年" "1988年" ...
+    ##   ..$ @level: chr [1:39] "1" "1" "1" "1" ...
     ##  $ .names: tibble [5 × 2] (S3: tbl_df/tbl/data.frame)
     ##   ..$ id  : chr [1:5] "tab" "cat01" "cat02" "area" ...
     ##   ..$ name: chr [1:5] "表章項目" "品目分類（2020年改定）" "世帯区分（年次－二人以上の世帯）" "地域区分" ...
@@ -141,7 +135,7 @@ lookup_cat01 %>%
     ##  8 010230000  1.2.3 魚肉練製品     3     円    010200000 
     ##  9 010240000  1.2.4 他の魚介加工品 3     円    010200000 
     ## 10 010310000  1.3.1 生鮮肉         3     円    010300000 
-    ## # … with 86 more rows
+    ## # ℹ 86 more rows
 
 ``` r
 lookup_cat01 %>% 
@@ -167,19 +161,19 @@ content <- estatapi::estat_getStatsData(
   statsDataId = "0003348239")
 ```
 
-    ## Fetching record 1-100000... (total: 637141 records)
+    ## Fetching record 1-100000... (total: 674401 records)
 
-    ## Fetching record 100001-200000... (total: 637141 records)
+    ## Fetching record 100001-200000... (total: 674401 records)
 
-    ## Fetching record 200001-300000... (total: 637141 records)
+    ## Fetching record 200001-300000... (total: 674401 records)
 
-    ## Fetching record 300001-400000... (total: 637141 records)
+    ## Fetching record 300001-400000... (total: 674401 records)
 
-    ## Fetching record 400001-500000... (total: 637141 records)
+    ## Fetching record 400001-500000... (total: 674401 records)
 
-    ## Fetching record 500001-600000... (total: 637141 records)
+    ## Fetching record 500001-600000... (total: 674401 records)
 
-    ## Fetching record 600001-637141... (total: 637141 records)
+    ## Fetching record 600001-674401... (total: 674401 records)
 
 ``` r
 # add level column
@@ -194,7 +188,7 @@ expenditure <- content %>%
   rename(city = 地域区分)
 ```
 
-## Confirm the Miyazaki-city’s win in dumplings
+## Confirm the Hamamatsu-city’s come-back win in dumplings
 
 According to [this page
 (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.html), the sample
@@ -208,35 +202,33 @@ the numbers do not contradict my assumption of 3 percent standard error
 ratio for cat01 of level 5.
 
     ## # A tibble: 10 × 2
-    ##    city           value
-    ##    <chr>          <dbl>
-    ##  1 45201 宮崎市    4053
-    ##  2 09201 宇都宮市  3763
-    ##  3 22130 浜松市    3434
-    ##  4 46201 鹿児島市  2999
-    ##  5 27140 堺市      2590
-    ##  6 12100 千葉市    2379
-    ##  7 26100 京都市    2342
-    ##  8 10201 前橋市    2264
-    ##  9 27100 大阪市    2251
-    ## 10 25201 大津市    2221
+    ##    city             value
+    ##    <chr>            <dbl>
+    ##  1 22130 浜松市      4041
+    ##  2 45201 宮崎市      3498
+    ##  3 09201 宇都宮市    3199
+    ##  4 26100 京都市      2661
+    ##  5 25201 大津市      2489
+    ##  6 29201 奈良市      2440
+    ##  7 23100 名古屋市    2390
+    ##  8 11100 さいたま市  2287
+    ##  9 13100 東京都区部  2204
+    ## 10 27100 大阪市      2169
 
-Miyazaki-city won in 2021 and 2022, but is a relatively new comer. The
+Miyazaki-city won in 2021 and 2022. Hamamatsu-city won in 2023. The
 battle between Utsunomiya-city and Hamamatsu-city has a long history.
-Let us draw all available years of top 10 cities in 2022.
+Let us draw all available years of top 10 cities in 2023.
 
-![](README_files/figure-gfm/line_chart-1.png)<!-- --> Hamamatsu-city has
-been rather stable since 2017, but Miyazaki-city has risen rapidly since
-2020.
+![](README_files/figure-gfm/line_chart-1.png)<!-- -->
 
 By the way, these expenditures don’t include dumplings you eat at the
 restaurants.
 
-## Hamamatsu-city could not regain championship in grilled eel
+## Hamamatsu-city also regained championship in grilled eel
 
 Hamamatsu-city had been the top of eating the grilled eel in 11 years in
 a row up to 2018. It lost the top position in 2019, regained it in 2020,
-lost again in 2021, and remained second in 2022.
+lost again in 2021, remained second in 2022, and regained it in 2023.
 
 I search eel to get cat01_code. It is “010920010”.
 
@@ -268,14 +260,13 @@ I show the top 3 in eel every year.
     ## 2019  "25201 大津市" "26100 京都市"   "22100 静岡市"    
     ## 2020  "22130 浜松市" "25201 大津市"   "24201 津市"      
     ## 2021  "26100 京都市" "22130 浜松市"   "13100 東京都区部"
-    ## 2022  "26100 京都市" "22130 浜松市"   "17201 金沢市"
-
-Kyoto-city was the top in 2021 and 2022.
+    ## 2022  "26100 京都市" "22130 浜松市"   "17201 金沢市"    
+    ## 2023  "22130 浜松市" "22100 静岡市"   "26100 京都市"
 
 ## Persistent victory items are mostly speciality goods
 
-I count the number of cities which get the top rank in 15 years from
-2007 to 2022 for each item.
+I count the number of cities which get the top rank in 17 years from
+2007 to 2023 for each item.
 
 ![](README_files/figure-gfm/histogram-1.png)<!-- -->
 
@@ -305,70 +296,70 @@ items match speciality goods in each city.
     ## 18 010800040  343 カステラ             42201 長崎市  
     ## 19 011211010  390 日本そば・うどん     37201 高松市
 
-## Who are the top rank earners in 2022?
+## Who are the top rank earners in 2023?
 
-In how many items among 488 did each city get the top in 2022?
+In how many items among 488 did each city get the top in 2023?
 
     ## # A tibble: 52 × 2
     ## # Groups:   city [52]
     ##    city                 n
     ##    <chr>            <int>
-    ##  1 11100 さいたま市    21
-    ##  2 10201 前橋市        17
-    ##  3 17201 金沢市        17
-    ##  4 02201 青森市        16
-    ##  5 26100 京都市        16
-    ##  6 14100 横浜市        15
-    ##  7 39201 高知市        15
-    ##  8 07201 福島市        14
-    ##  9 16201 富山市        14
-    ## 10 21201 岐阜市        14
-    ## 11 47201 那覇市        14
-    ## 12 14130 川崎市        13
-    ## 13 28100 神戸市        13
-    ## 14 06201 山形市        12
-    ## 15 23100 名古屋市      12
-    ## 16 25201 大津市        12
-    ## 17 13100 東京都区部    11
-    ## 18 14150 相模原市      11
-    ## 19 03201 盛岡市        10
-    ## 20 09201 宇都宮市      10
-    ## 21 15100 新潟市        10
-    ## 22 18201 福井市        10
-    ## 23 20201 長野市        10
-    ## 24 22100 静岡市        10
-    ## 25 35203 山口市        10
-    ## 26 29201 奈良市         9
-    ## 27 31201 鳥取市         9
-    ## 28 34100 広島市         9
-    ## 29 12100 千葉市         8
-    ## 30 22130 浜松市         8
-    ## 31 37201 高松市         8
-    ## 32 40130 福岡市         8
-    ## 33 05201 秋田市         7
-    ## 34 27140 堺市           7
-    ## 35 32201 松江市         7
-    ## 36 33100 岡山市         7
-    ## 37 36201 徳島市         7
-    ## 38 01100 札幌市         6
-    ## 39 42201 長崎市         6
-    ## 40 43100 熊本市         6
-    ## 41 46201 鹿児島市       6
-    ## 42 04100 仙台市         5
-    ## 43 19201 甲府市         5
-    ## 44 41201 佐賀市         5
-    ## 45 08201 水戸市         4
-    ## 46 27100 大阪市         4
-    ## 47 30201 和歌山市       4
-    ## 48 40100 北九州市       4
-    ## 49 24201 津市           3
-    ## 50 38201 松山市         3
-    ## 51 44201 大分市         3
-    ## 52 45201 宮崎市         3
+    ##  1 11100 さいたま市    24
+    ##  2 13100 東京都区部    23
+    ##  3 39201 高知市        18
+    ##  4 06201 山形市        16
+    ##  5 02201 青森市        15
+    ##  6 07201 福島市        15
+    ##  7 26100 京都市        15
+    ##  8 05201 秋田市        14
+    ##  9 20201 長野市        14
+    ## 10 22130 浜松市        14
+    ## 11 16201 富山市        13
+    ## 12 23100 名古屋市      13
+    ## 13 27140 堺市          13
+    ## 14 03201 盛岡市        12
+    ## 15 15100 新潟市        12
+    ## 16 17201 金沢市        12
+    ## 17 31201 鳥取市        12
+    ## 18 14130 川崎市        11
+    ## 19 14150 相模原市      11
+    ## 20 08201 水戸市        10
+    ## 21 14100 横浜市        10
+    ## 22 25201 大津市        10
+    ## 23 47201 那覇市        10
+    ## 24 09201 宇都宮市       9
+    ## 25 40100 北九州市       9
+    ## 26 40130 福岡市         9
+    ## 27 21201 岐阜市         8
+    ## 28 24201 津市           8
+    ## 29 33100 岡山市         8
+    ## 30 34100 広島市         8
+    ## 31 01100 札幌市         7
+    ## 32 04100 仙台市         7
+    ## 33 18201 福井市         7
+    ## 34 42201 長崎市         7
+    ## 35 43100 熊本市         7
+    ## 36 10201 前橋市         6
+    ## 37 19201 甲府市         6
+    ## 38 22100 静岡市         6
+    ## 39 30201 和歌山市       6
+    ## 40 32201 松江市         6
+    ## 41 36201 徳島市         6
+    ## 42 37201 高松市         6
+    ## 43 41201 佐賀市         6
+    ## 44 44201 大分市         6
+    ## 45 28100 神戸市         5
+    ## 46 46201 鹿児島市       5
+    ## 47 12100 千葉市         3
+    ## 48 29201 奈良市         3
+    ## 49 35203 山口市         3
+    ## 50 45201 宮崎市         2
+    ## 51 27100 大阪市         1
+    ## 52 38201 松山市         1
 
-## Ranks distribution in each city in 2022
+## Ranks distribution in each city in 2023
 
-I draw the histogram that shows each city’s ranks of 488 items in 2022.
+I draw the histogram that shows each city’s ranks of 488 items in 2023.
 Naha-city and other Kyushu cities and Wakayama-city tend to rank low,
 while Tokyo and other Kanto cities tend to rank high.
 
@@ -379,11 +370,10 @@ level differences.
 
     ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
     ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
 
 ![](README_files/figure-gfm/total_expenditure-1.png)<!-- -->
-
-I draw the map of 47 prefectures by excluding 5 non-capital cities.
-
-![](README_files/figure-gfm/jpn_shp-1.png)<!-- -->
 
 EOL
