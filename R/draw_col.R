@@ -21,7 +21,7 @@ draw_col <- function(df) {
     ggplot2::ggplot(ggplot2::aes(value, forcats::fct_rev(city_e), fill = loser)) +
     ggplot2::geom_col(width = 1) +
     ggplot2::geom_vline(xintercept = national_average,
-                 color = "white",
+                 color = "gray80",
                  linewidth = 1) +
     ggplot2::annotate("text",
                y = "26100 Kyoto",

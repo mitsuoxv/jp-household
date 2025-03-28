@@ -30,8 +30,8 @@ showMapUI <- function(id) {
       sliderInput(NS(id, "year"),
                   label = h3("Select year"),
                   min = 2007,
-                  max = 2023,
-                  value = 2023,
+                  max = 2024,
+                  value = 2024,
                   sep = "",
                   animate = TRUE
       ),
@@ -52,8 +52,8 @@ showMapUI <- function(id) {
     
     # Show a plot of the generated bar chart
     mainPanel(
-      plotOutput(NS(id, "mapPlot"), height = "500px"),
-      plotOutput(NS(id, "barPlot"), height = "600px")
+      plotOutput(NS(id, "mapPlot"), height = "400px"),
+      plotOutput(NS(id, "barPlot"), height = "700px")
     )
   )
 }

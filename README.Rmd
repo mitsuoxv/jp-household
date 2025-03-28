@@ -24,15 +24,16 @@ Warning: If you can't read Japanese, it would be very difficult for you to follo
 
 ## Summary
 
-I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. This is an annual routine news report. In 2023, Hamamatsu-city came back to the top rank [(Japanese)](https://www.at-s.com/news/article/shizuoka/1408002.html), based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
+I hear which city in Japan consumed most dumplings (gyouza in Japanese, and jiaozi in Chinese) per household last year. This is an annual routine news report. In 2024, Hamamatsu-city kept the top rank [(Japanese)](https://www.at-s.com/life/article/ats/1650252.html), based on [Family Income and Expenditure Survey](https://www.stat.go.jp/english/data/kakei/) by the Statistics Bureau, Ministry of Internal Affairs and Communications. So I get data from [e-Stat](https://www.e-stat.go.jp/en) by using [estatapi package by yutannihilation](https://github.com/yutannihilation/estatapi/blob/master/README.en.md).
 
-I find that persistent winning items are speciality goods of each city. I list the top earners in 2023. I draw ranks distribution in each city in 2023. And I argue ranks distribution is partly due to total expenditure differences.
+I find that persistent winning items are speciality goods of each city. I list the top earners in 2024. I draw ranks distribution in each city in 2024. And I argue ranks distribution is partly due to total expenditure differences.
 
 ```{r libraries, include=FALSE}
 library(tidyverse)
 library(scales)
 
-library(NipponMap)
+# library(NipponMap)
+# dyn.load('/usr/local/lib/libgeos_c.so', local=FALSE)
 library(sf)
 
 theme_set(theme_light())
@@ -73,7 +74,7 @@ lookup_cat01 %>%
 
 ## Get data
 
-As the maximum records per GET is set to 100000, I must repeat five times in this case if I GET manually. Fortunately estat_getStatsData function automates this process. I add "level" of cat01, and clean up.
+As the maximum records per GET is set to 100000, I must repeat eight times in this case if I GET manually. Fortunately estat_getStatsData function automates this process. I add "level" of cat01, and clean up.
 
 ```{r get_data, cache=FALSE}
 # get 599881 records
@@ -95,7 +96,7 @@ expenditure <- content %>%
 
 ```
 
-## Confirm the Hamamatsu-city's come-back win in dumplings
+## Confirm the Hamamatsu-city's two-year consecutive win in dumplings
 
 According to [this page (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.html), the sample numbers per city are approximately 100 except Tokyo (408 samples). If I assume the standard deviation is 30 percent of the mean, the standard error ratio (ratio of standard deviation of mean estimates to the estimated mean) is 3 percent. Table 1-1 in [this page](https://www.stat.go.jp/data/kakei/hyohonkekka.html) publish the standard error ratios in cat01 of level less than 3 in 2013 survey, and the numbers do not contradict my assumption of 3 percent standard error ratio for cat01 of level 5. 
 
@@ -103,7 +104,7 @@ According to [this page (Japanese)](https://www.stat.go.jp/data/kakei/hyohon.htm
 # 010920070 371 ぎょうざ
 top10city <- expenditure %>% 
   filter(cat01_code == "010920070") %>% 
-  filter(year == 2023, area_code != "00000") %>% 
+  filter(year == 2024, area_code != "00000") %>% 
   select(city, value) %>% 
   arrange(desc(value)) %>% 
   slice_head(n = 10)
@@ -112,7 +113,7 @@ top10city
 
 ```
 
-Miyazaki-city won in 2021 and 2022. Hamamatsu-city won in 2023. The battle between Utsunomiya-city and Hamamatsu-city has a long history. Let us draw all available years of top 10 cities in 2023.
+Miyazaki-city won in 2021 and 2022. Hamamatsu-city won in 2023 and 2024. The battle between Utsunomiya-city and Hamamatsu-city has a long history. Let us draw all available years of top 10 cities in 2024.
 
 ```{r line_chart, echo=FALSE, fig.width=6, fig.width=8}
 expenditure %>% 
@@ -131,9 +132,9 @@ expenditure %>%
 
 By the way, these expenditures don't include dumplings you eat at the restaurants.
 
-## Hamamatsu-city also regained championship in grilled eel
+## Hamamatsu-city also kept championship in grilled eel
 
-Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018. It lost the top position in 2019, regained it in 2020, lost again in 2021, remained second in 2022, and regained it in 2023.
+Hamamatsu-city had been the top of eating the grilled eel in 11 years in a row up to 2018. It lost the top position to Ohtsu in 2019, regained it in 2020, lost again to Kyoto in 2021, remained second in 2022, regained it in 2023, and kept it in 2024.
 
 I search eel to get cat01_code. It is "010920010".
 
@@ -169,7 +170,7 @@ area_ranks %>%
 
 ## Persistent victory items are mostly speciality goods
 
-I count the number of cities which get the top rank in 17 years from 2007 to 2023 for each item.
+I count the number of cities which get the top rank in 17 years from 2007 to 2024 for each item.
 
 ```{r histogram, echo=FALSE, fig.width=6, fig.height=6}
 n_top <- area_ranks %>% 
@@ -193,38 +194,38 @@ There are `r nrow(n_top_1)` items where one city keeps the top rank. Most of the
 
 ```{r speciality goods, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2023) %>% 
+  filter(ranks == 1, year == 2024) %>% 
   semi_join(n_top_1, by = "cat01_code") %>% 
   select(cat01_code, `品目分類（2020年改定）`, city) %>% 
   print(n=Inf)
 
 ```
 
-## Who are the top rank earners in 2023?
+## Who are the top rank earners in 2024?
 
-In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2023?
+In how many items among `r lookup_cat01 %>% filter(level == 5) %>% nrow()` did each city get the top in 2024?
 
 ```{r top_counts, echo=FALSE}
 area_ranks %>% 
-  filter(ranks == 1, year == 2023) %>% 
+  filter(ranks == 1, year == 2024) %>% 
   group_by(city) %>% 
   count(sort = TRUE) %>% 
   print(n=Inf)
 
 ```
 
-## Ranks distribution in each city in 2023
+## Ranks distribution in each city in 2024
 
-I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2023. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
+I draw the histogram that shows each city's ranks of `r lookup_cat01 %>% filter(level == 5) %>% nrow()` items in 2024. Naha-city and other Kyushu cities and Wakayama-city tend to rank low, while Tokyo and other Kanto cities tend to rank high.
 
 ```{r histogram2, echo=FALSE, fig.width=10, fig.height=8}
 area_ranks %>% 
-  filter(year == 2023) %>% 
+  filter(year == 2024) %>% 
   ggplot(aes(x = ranks)) +
   geom_histogram(boundary= 0.5, binwidth = 4) +
   facet_wrap(~ city) +
   coord_cartesian(xlim = c(1, 52)) +
-  labs(title = "Ranks distribution in 52 cities in 2023")
+  labs(title = "Ranks distribution in 52 cities in 2024")
 
 ```
 This pattern reflects that total expenditures are high in Kanto, and low in Wakayama-city, Naha-city and other Kyushu cities, partly due to price level differences.
@@ -237,16 +238,16 @@ expenditure %>%
 
 national <- expenditure %>% 
   filter(cat01_code == "001100000") %>%
-  filter(year == 2023, area_code == "00000", cat02_code == "03") %>% 
+  filter(year == 2024, area_code == "00000", cat02_code == "03") %>% 
   select(value) %>%
   as.numeric()
 
 expenditure %>% 
   filter(cat01_code == "001100000") %>% #消費支出
-  filter(year == 2023, area_code != "00000") %>% 
+  filter(year == 2024, area_code != "00000") %>% 
   ggplot(aes(x = fct_reorder(city, value), y = value)) +
   geom_hline(yintercept = national,
-             color = "white", size = 2) +
+             color = "white", linewidth = 2) +
   geom_point() +
   annotate("text", x = "37201 高松市", y = national + 100000,
            label = "national mean") +
@@ -262,12 +263,16 @@ expenditure %>%
 
 ```{r jpn_shp, echo=FALSE, results="hide"}
 
-japan_shp <- st_read(system.file("shapes/jpn.shp", package="NipponMap"))
+japan_shp <- read_sf(system.file("shapes/jpn.shp", package="NipponMap"))
+
+japan_shp |> 
+  ggplot() +
+  geom_sf()
 
 exp_only_capital <- expenditure %>% 
   filter(!area_code %in% c("00000", "14004", "14150", "22004", "27004", "40003")) %>% #全国、川崎市、相模原市、浜松市、堺市、北九州市
   filter(cat01_code == "001100000") %>% #消費支出
-  filter(year == 2023) %>% 
+  filter(year == 2024) %>% 
   arrange(area_code)
 
 ```
@@ -296,7 +301,10 @@ expense <- expense %>%
 
 # read map data
 prefectures_map <-
-  st_read(system.file("shapes/jpn.shp", package = "NipponMap"))
+  read_sf(system.file("shapes/jpn.shp", package = "NipponMap"))
+
+# inset Okinawa
+prefectures_map$geometry[[47]] <- prefectures_map$geometry[[47]] + c(7, 14)
 
 # create a list of item menu by level
 cat01_code_level <- vector("list", 5)
