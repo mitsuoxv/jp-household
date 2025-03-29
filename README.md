@@ -373,6 +373,4 @@ level differences.
 
 ![](README_files/figure-gfm/total_expenditure-1.png)<!-- -->
 
-![](README_files/figure-gfm/jpn_shp-1.png)<!-- -->
-
 EOL
